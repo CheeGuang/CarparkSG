@@ -5,6 +5,8 @@ require("dotenv").config();
 const express = require("express");
 // Initialising path
 const path = require("path");
+// Initialising carparkAvailability Routes
+const carparkAvailabilityRoutes = require("./controllers/carparkAvailability/carparkAvailability.routes");
 
 // ========== Set-Up ==========
 // Initiating app
@@ -21,6 +23,10 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, ".", "public", "index.html"));
 });
+
+// ========== Routes ==========
+// Appointment Route
+app.use("/api/carparkAvailability", carparkAvailabilityRoutes);
 
 // ========== Initialise Server ==========
 // Server Listening at port 8000
