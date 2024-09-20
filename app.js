@@ -7,6 +7,8 @@ const express = require("express");
 const path = require("path");
 // Initialising carparkAvailability Routes
 const carparkAvailabilityRoutes = require("./controllers/carparkAvailability/carparkAvailability.routes");
+// Initialising carparkInformation Routes
+const carparkInformationRoutes = require("./controllers/carparkInformation/carparkInformation.routes");
 
 // ========== Set-Up ==========
 // Initiating app
@@ -25,8 +27,10 @@ app.get("/", (req, res) => {
 });
 
 // ========== Routes ==========
-// Appointment Route
+// Carpark Availability Route
 app.use("/api/carparkAvailability", carparkAvailabilityRoutes);
+// Carpark Information Route
+app.use("/api/carparkInformation", carparkInformationRoutes);
 
 // ========== Initialise Server ==========
 // Server Listening at port 8000

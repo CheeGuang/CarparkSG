@@ -1,15 +1,15 @@
 // ========== Models ==========
 // Initialising model
-const CarparkAvailability = require("../../models/CarparkAvailability");
+const CarparkInformation = require("../../models/carparkInformation.js");
 
 // ========== Controller ==========
 // Controller Logic
-class CarparkAvailabilityController {
-  static async getCarparkAvailability(req, res) {
+class CarparkInformationController {
+  static async getCarparkInformation(req, res) {
     console.log("Hi");
     try {
-      const carparkAvailability = new CarparkAvailability();
-      const data = await carparkAvailability.fetchCarparkData();
+      const carparkInformation = new CarparkInformation();
+      const data = await carparkInformation.fetchCarparkData();
 
       res.status(200).json({
         success: true,
@@ -19,7 +19,7 @@ class CarparkAvailabilityController {
       console.error(`Error in CarparkController: ${error.message}`);
       res.status(500).json({
         success: false,
-        message: "Failed to retrieve carpark availability data",
+        message: "Failed to retrieve carpark information data",
       });
     }
   }
@@ -27,4 +27,4 @@ class CarparkAvailabilityController {
 
 // ========== Export ==========
 // Exporting Controller
-module.exports = CarparkAvailabilityController;
+module.exports = CarparkInformationController;

@@ -3,9 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>CarparkSG</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Google Maps API -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDel5_SPyjiSrwHDCKMM645JGlIYX5Ny7k&libraries=maps,marker&v=beta"
+      defer
+    ></script>
+    <!-- MarkerClusterer library -->
+    <script src="https://unpkg.com/@googlemaps/markerclusterer"></script>
+    <!-- Custom Script -->
+    <script src="./js/index.js" defer></script>
   </head>
   <body>
-    <h1>Hello</h1>
+    <div class="container">
+      <h1 class="text-center my-4">CarparkSG</h1>
+      <div class="row justify-content-center">
+        <div id="map" style="height: 400px; width: 100%"></div>
+      </div>
+    </div>
   </body>
 </html>
