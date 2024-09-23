@@ -6,7 +6,6 @@ const CarparkInformation = require("../../models/carparkInformation.js");
 // Controller Logic
 class CarparkInformationController {
   static async getCarparkInformation(req, res) {
-    console.log("Hi");
     try {
       const carparkInformation = new CarparkInformation();
       const data = await carparkInformation.fetchCarparkData();

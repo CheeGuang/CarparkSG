@@ -1,0 +1,77 @@
+/* General styles */
+body {
+  background-color: #f4f4f4;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+}
+
+h1,
+h3 {
+  font-weight: bold;
+}
+
+#content {
+  margin-top: 1vh;
+  gap: 1vw;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+#map {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 85vh;
+}
+
+/* Carpark Details Styling */
+#carpark-details {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+  height: 85vh !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#carpark-info {
+  overflow-y: auto; /* Make the content inside scrollable */
+  height: 100%;
+}
+
+#carpark-info h4 {
+  font-size: 1.5em;
+  color: #343a40;
+  margin-bottom: 10px;
+}
+
+#carpark-info p {
+  font-size: 1.1em;
+  color: #495057;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+#carpark-info p:last-child {
+  margin-bottom: 0;
+}
+
+.carpark-detail {
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
+}
+
+#carpark-details h3 {
+  font-size: 1.75em;
+  color: #212529;
+  margin-bottom: 20px;
+  font-weight: 500;
+}

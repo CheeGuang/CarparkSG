@@ -6,7 +6,6 @@ const CarparkAvailability = require("../../models/CarparkAvailability");
 // Controller Logic
 class CarparkAvailabilityController {
   static async getCarparkAvailability(req, res) {
-    console.log("Hi");
     try {
       const carparkAvailability = new CarparkAvailability();
       const data = await carparkAvailability.fetchCarparkData();
