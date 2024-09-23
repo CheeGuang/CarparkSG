@@ -1,6 +1,6 @@
 // ========== Models ==========
 // Initialising model
-const CarparkAvailability = require("../../models/CarparkAvailability");
+const CarparkAvailability = require("../../models/carparkAvailability");
 
 // ========== Controller ==========
 // Controller Logic
