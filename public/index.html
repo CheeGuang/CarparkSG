@@ -17,6 +17,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
     <!-- MarkerClusterer library -->
     <script src="https://unpkg.com/@googlemaps/markerclusterer"></script>
+    <!-- Bootstrap JS for modal functionality -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <!-- Custom Script -->
     <script src="./js/index.js" async></script>
     <!-- Google Fonts -->
@@ -46,6 +48,59 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal for displaying carpark details -->
+    <div
+      class="modal fade"
+      id="carparkModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="carparkModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="carparkModalLabel">Carpark Details</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Address:</strong> <span id="modalAddress"></span></p>
+            <p>
+              <strong>Free Parking Now:</strong>
+              <span id="modalFreeParking"></span>
+            </p>
+            <p>
+              <strong>Total Lots:</strong> <span id="modalTotalLots"></span>
+            </p>
+            <p>
+              <strong>Available Lots:</strong>
+              <span id="modalAvailableLots"></span>
+            </p>
+            <p>
+              <strong>Last Updated:</strong> <span id="modalLastUpdated"></span>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Google Maps API with Geometry Library -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDel5_SPyjiSrwHDCKMM645JGlIYX5Ny7k&libraries=geometry&callback=initMap"

@@ -37,17 +37,34 @@ function initMap() {
     scaledSize: new google.maps.Size(22, 28), // Set the size of the selected marker
   };
 
+  const unavailableIcon = {
+    url: "../img/UnavailableMarker.png",
+    scaledSize: new google.maps.Size(22, 28), // Set the size of the unavailable marker
+  };
+
   function displayNearestCarparks() {
     if (userLocationLoaded && carparkDataLoaded) {
-      const nearestCarparks = findNearestCarparks(userLocation, markers, 5);
+      // Filter only available carparks
+      const availableMarkers = markers.filter(
+        (marker) => marker.availability.lots_available > 0
+      );
+      const nearestCarparks = findNearestCarparks(
+        userLocation,
+        availableMarkers,
+        5
+      );
 
-      // Reset all markers to the normal icon
+      // Reset all markers to the normal or unavailable icon
       markers.forEach((marker) => {
-        marker.setIcon(defaultIcon); // Resets to the normal marker icon
+        if (marker.availability.lots_available === 0) {
+          marker.setIcon(unavailableIcon); // Use unavailable marker icon for carparks with 0 availability
+        } else {
+          marker.setIcon(defaultIcon); // Resets to the normal marker icon
+        }
       });
 
       if (nearestCarparks.length > 0) {
-        // Change the icon of the nearest 5 carpark markers to the selected marker icon
+        // Change the icon of the nearest 5 available carpark markers to the selected marker icon
         nearestCarparks.forEach(({ marker }) => {
           marker.setIcon(selectedIcon); // Selected marker icon
         });
@@ -93,11 +110,15 @@ function initMap() {
                     position: carparkLocation,
                     map: map,
                     title: carpark.address,
-                    icon: defaultIcon, // Default marker icon
+                    icon:
+                      availabilityInfo.lots_available === 0
+                        ? unavailableIcon
+                        : defaultIcon, // Use the unavailable icon if no lots available
                   });
 
+                  // Add a click listener for showing the modal with carpark details
                   marker.addListener("click", () => {
-                    displayCarparkDetails(carpark, availabilityInfo);
+                    showModal(carpark, availabilityInfo);
                     marker.setIcon(selectedIcon); // Change to selected marker icon on click
                   });
 
@@ -152,6 +173,23 @@ function initMap() {
 
     // Add scrollable class to make the panel scrollable
     detailsPanel.classList.add("scrollable");
+  }
+
+  function showModal(carpark, availability) {
+    // Populate the modal fields
+    document.getElementById("modalAddress").innerText = carpark.address;
+    document.getElementById("modalFreeParking").innerText =
+      carpark.free_parking_now ? "Yes" : "No";
+    document.getElementById("modalTotalLots").innerText =
+      availability.total_lots;
+    document.getElementById("modalAvailableLots").innerText =
+      availability.lots_available;
+    document.getElementById("modalLastUpdated").innerText = new Date(
+      availability.update_datetime
+    ).toLocaleString();
+
+    // Show the modal
+    $("#carparkModal").modal("show");
   }
 
   function findNearestCarparks(userLocation, markers, count = 5) {
