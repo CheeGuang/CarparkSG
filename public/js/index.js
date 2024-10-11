@@ -25,54 +25,16 @@ function initMap() {
   let markers = [];
   let userLocation = null;
   let carparkDataLoaded = false;
-  let userLocationLoaded = false;
 
   const defaultIcon = {
     url: "../img/Marker.png",
-    scaledSize: new google.maps.Size(22, 28), // Set the size of the default marker
-  };
-
-  const selectedIcon = {
-    url: "../img/SelectedMarker.png",
-    scaledSize: new google.maps.Size(22, 28), // Set the size of the selected marker
+    scaledSize: new google.maps.Size(21, 28),
   };
 
   const unavailableIcon = {
     url: "../img/UnavailableMarker.png",
-    scaledSize: new google.maps.Size(22, 28), // Set the size of the unavailable marker
+    scaledSize: new google.maps.Size(21, 28),
   };
-
-  function displayNearestCarparks() {
-    if (userLocationLoaded && carparkDataLoaded) {
-      // Filter only available carparks
-      const availableMarkers = markers.filter(
-        (marker) => marker.availability.lots_available > 0
-      );
-      const nearestCarparks = findNearestCarparks(
-        userLocation,
-        availableMarkers,
-        5
-      );
-
-      // Reset all markers to the normal or unavailable icon
-      markers.forEach((marker) => {
-        if (marker.availability.lots_available === 0) {
-          marker.setIcon(unavailableIcon); // Use unavailable marker icon for carparks with 0 availability
-        } else {
-          marker.setIcon(defaultIcon); // Resets to the normal marker icon
-        }
-      });
-
-      if (nearestCarparks.length > 0) {
-        // Change the icon of the nearest 5 available carpark markers to the selected marker icon
-        nearestCarparks.forEach(({ marker }) => {
-          marker.setIcon(selectedIcon); // Selected marker icon
-        });
-
-        displayCarparksDetails(nearestCarparks);
-      }
-    }
-  }
 
   function fetchCarparkData() {
     fetch(`${window.location.origin}/api/carparkAvailability/`)
@@ -106,20 +68,28 @@ function initMap() {
 
                   const carparkLocation = { lat: latitude, lng: longitude };
 
+                  // Debug statement: print carpark location and available lots
+                  console.log(
+                    `Carpark Location: (${carpark.address}), Available Lots: ${
+                      availabilityInfo.lots_available
+                    }, availabilityInfo.lots_available === 0 ${
+                      availabilityInfo.lots_available === 0
+                    }`
+                  );
+
                   const marker = new google.maps.Marker({
                     position: carparkLocation,
                     map: map,
                     title: carpark.address,
                     icon:
-                      availabilityInfo.lots_available === 0
+                      availabilityInfo.lots_available === "0"
                         ? unavailableIcon
-                        : defaultIcon, // Use the unavailable icon if no lots available
+                        : defaultIcon, // Use unavailable icon if no lots available
                   });
 
                   // Add a click listener for showing the modal with carpark details
                   marker.addListener("click", () => {
                     showModal(carpark, availabilityInfo);
-                    marker.setIcon(selectedIcon); // Change to selected marker icon on click
                   });
 
                   markers.push(marker);
@@ -136,7 +106,6 @@ function initMap() {
               });
 
               carparkDataLoaded = true;
-              displayNearestCarparks();
             } else {
               console.error(
                 "Unexpected data format:",
@@ -152,27 +121,6 @@ function initMap() {
       .catch((error) => {
         console.error("Error fetching carpark availability data:", error);
       });
-  }
-
-  function displayCarparksDetails(nearestCarparks) {
-    const detailsPanel = document.getElementById("carpark-info");
-    detailsPanel.innerHTML = nearestCarparks
-      .map(
-        ({ carpark, availability }) => `
-        <div class="carpark-detail">
-          <h4>${carpark.address}</h4>
-          <p>Total Lots: ${availability.total_lots}</p>
-          <p>Available Lots: ${availability.lots_available}</p>
-          <p>Last Updated: ${new Date(
-            availability.update_datetime
-          ).toLocaleString()}</p>
-        </div>
-      `
-      )
-      .join("");
-
-    // Add scrollable class to make the panel scrollable
-    detailsPanel.classList.add("scrollable");
   }
 
   function showModal(carpark, availability) {
@@ -192,23 +140,7 @@ function initMap() {
     $("#carparkModal").modal("show");
   }
 
-  function findNearestCarparks(userLocation, markers, count = 5) {
-    const distances = markers.map((marker) => {
-      const distance = google.maps.geometry.spherical.computeDistanceBetween(
-        userLocation,
-        marker.getPosition()
-      );
-      return { marker, distance };
-    });
-
-    distances.sort((a, b) => a.distance - b.distance);
-    return distances.slice(0, count).map((d) => ({
-      marker: d.marker,
-      carpark: d.marker.carpark,
-      availability: d.marker.availability,
-    }));
-  }
-
+  // Geolocation to get the user's location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -216,11 +148,6 @@ function initMap() {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-
-        // Clear any previous marker
-        if (window.userLocationMarker) {
-          window.userLocationMarker.setMap(null);
-        }
 
         // Define the custom icon for live location
         const liveLocationIcon = {
@@ -232,18 +159,19 @@ function initMap() {
           strokeWeight: 4,
         };
 
-        window.userLocationMarker = new google.maps.Marker({
+        // Create the user location marker
+        const userLocationMarker = new google.maps.Marker({
           position: userLocation,
           map: map,
           icon: liveLocationIcon,
           title: "You are here",
         });
 
+        // Automatically zoom in and center the map on the user's location
         map.setCenter(userLocation);
         map.setZoom(17);
 
-        userLocationLoaded = true;
-        displayNearestCarparks();
+        fetchCarparkData(); // Fetch carpark data after centering the map
       },
       (error) => {
         console.error("Error: Unable to retrieve your location.", error);
@@ -262,8 +190,7 @@ function initMap() {
     fetchCarparkData();
   }
 
-  // Fetch carpark data initially and every minute
-  fetchCarparkData();
+  // Fetch carpark data every minute
   setInterval(fetchCarparkData, 60000);
 }
 

@@ -75,3 +75,74 @@ h3 {
   margin-bottom: 20px;
   font-weight: 500;
 }
+
+/* Modal Custom Styling */
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  font-family: "Roboto", sans-serif;
+}
+
+.modal-header {
+  border-bottom: none;
+  padding-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 1.75em;
+  font-weight: 500;
+  color: #212529;
+}
+
+.close {
+  font-size: 1.5rem;
+  color: #495057;
+  opacity: 0.8;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding-top: 0;
+  font-size: 1.1em;
+  color: #495057;
+}
+
+.modal-body p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.modal-footer {
+  border-top: none;
+  padding-top: 10px;
+}
+
+.modal-footer .btn {
+  font-size: 1em;
+  padding: 10px 20px;
+  border-radius: 30px;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #6c757d;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.modal-footer .btn-secondary:focus {
+  box-shadow: none;
+}
+
+/* Modal backdrop customisation */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly darker backdrop */
+}
