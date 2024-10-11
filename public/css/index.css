@@ -1,22 +1,6 @@
-/* General styles */
-body {
-  background-color: #f4f4f4;
-  color: #333;
-  font-family: "Roboto", sans-serif;
-}
-
-h1,
-h3 {
-  font-weight: bold;
-}
-
 #content {
   margin-top: 1vh;
   gap: 1vw;
-}
-
-.navbar-brand {
-  font-weight: 600;
 }
 
 #map {
@@ -26,7 +10,7 @@ h3 {
   height: 85vh;
 }
 
-/* Carpark Details Styling */
+/* Favourite Carparks Panel Styling (formerly Carpark Details) */
 #carpark-details {
   background-color: #f8f9fa;
   border-radius: 8px;

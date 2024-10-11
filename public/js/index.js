@@ -1,3 +1,11 @@
+$(document).ready(function () {
+  // Load the navbar from navbar.html into the #navbar div
+  $("#navbar").load("navbar.html");
+
+  // Initialize the map and other functionalities
+  initMap();
+});
+
 function svy21ToWgs84(x, y) {
   const svy21 = proj4(
     "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +datum=WGS84 +to_meter=1"

@@ -1,0 +1,28 @@
+.navbar {
+  background-color: #ffffff !important;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Styles for the guest account icon */
+.guest-icon-link {
+  text-decoration: none; /* Remove underline */
+}
+
+.guest-icon {
+  font-size: 40px; /* Adjust icon size */
+  color: #ccc; /* Grey color for the icon */
+  transition: color 0.3s ease-in-out; /* Smooth transition */
+}
+
+.guest-icon:hover {
+  color: #b0b0b0; /* Darken grey on hover */
+}
+
+.guest-icon:focus {
+  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5); /* Subtle grey glow when focused */
+}
