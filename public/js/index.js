@@ -1,8 +1,18 @@
 $(document).ready(function () {
-  // Load the navbar from navbar.html into the #navbar div
-  $("#navbar").load("navbar.html");
+  // Check if it's a new session
+  if (!sessionStorage.getItem("visited")) {
+    // Show the welcome modal
+    $("#welcomeModal").modal("show");
 
-  // Initialize the map and other functionalities
+    // Mark the session as visited
+    sessionStorage.setItem("visited", "true");
+  }
+  // Add an onClick listener to the info button
+  $("#viewInfo").on("click", function () {
+    $("#welcomeModal").modal("show");
+  });
+  // Load the navbar and initialize the map
+  $("#navbar").load("navbar.html");
   initMap();
 });
 
@@ -232,6 +242,18 @@ function initMap() {
     map.setCenter(place.geometry.location);
     map.setZoom(17);
   });
+
+  // Add functionality for "Jump Back to Location" button
+  document
+    .getElementById("jumpBackToLocation")
+    .addEventListener("click", () => {
+      if (userLocation) {
+        map.setCenter(userLocation);
+        map.setZoom(17);
+      } else {
+        alert("User location not available.");
+      }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", initMap);

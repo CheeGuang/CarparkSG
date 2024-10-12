@@ -57,7 +57,19 @@
     <div class="container-fluid">
       <div id="content" class="row d-flex justify-content-center">
         <!-- Map Container -->
-        <div id="map" class="col-lg-7" style="height: 85vh"></div>
+        <div class="col-lg-7" style="position: relative; height: 85vh">
+          <div id="map" style="position: relative; height: 85vh"></div>
+          <!-- Font Awesome Location Button -->
+          <button id="jumpBackToLocation" class="btn btn-primary">
+            <i class="fas fa-location-arrow"></i>
+          </button>
+
+          <!-- Font Awesome Info Button -->
+          <button id="viewInfo" class="btn btn-info">
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </div>
+
         <!-- Favourite Carparks Panel -->
         <div id="carpark-details" class="col-lg-4 p-3">
           <h3>Favourite Carparks</h3>
@@ -73,6 +85,75 @@
               <span class="fas fa-star" style="color: gold"></span> to add it to
               your favourites.
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welcome Modal -->
+    <div
+      class="modal fade"
+      id="welcomeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="welcomeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content welcome-modal">
+          <div class="modal-header welcome-header">
+            <h5 class="modal-title" id="welcomeModalLabel">
+              <img
+                src="./img/CarparkSGLogo-Long-Light.png"
+                alt="CarparkSG Logo"
+                class="welcome-logo"
+              />
+            </h5>
+            <button
+              type="button"
+              class="close welcome-close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body welcome-body">
+            <p class="welcome-text">Welcome to CarparkSG!</p>
+            <p class="welcome-subtext">
+              Check carpark availabilities in Singapore effortlessly. <br />
+              Tap on the Carpark Markers
+              <img
+                src="./img/Marker.png"
+                alt="Carpark Marker"
+                style="width: 12px; height: 17px; margin: 0px 3px"
+              />
+              to view details. <br />
+              <hr>
+              Red Carpark Markers
+              <img
+                src="./img/Marker.png"
+                alt="Carpark Marker"
+                style="width: 12px; height: 17px; margin: 0px 3px"
+              />
+              mean the carpark is not full. <br />
+              Grey Carpark Markers
+              <img
+                src="./img/UnavailableMarker.png"
+                alt="Unavailable Carpark Marker"
+                style="width: 12px; height: 17px; margin: 0px 3px"
+              />
+              mean the carpark is full.
+            </p>
+          </div>
+          <div class="modal-footer welcome-footer">
+            <button
+              type="button"
+              class="btn btn-primary welcome-button"
+              data-dismiss="modal"
+            >
+              Continue
+            </button>
           </div>
         </div>
       </div>
