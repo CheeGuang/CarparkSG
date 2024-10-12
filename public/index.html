@@ -30,10 +30,29 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./img/CarparkSGLogo-Small-Light.png"
+    />
   </head>
   <body>
     <!-- Navbar will be loaded here -->
     <div id="navbar"></div>
+
+    <!-- Search Bar for Address Autocomplete -->
+    <div class="container-fluid">
+      <div class="row my-3">
+        <div class="col-12">
+          <input
+            type="text"
+            id="location-input"
+            placeholder="Search for an address"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
 
     <div class="container-fluid">
       <div id="content" class="row d-flex justify-content-center">
@@ -43,7 +62,17 @@
         <div id="carpark-details" class="col-lg-4 p-3">
           <h3>Favourite Carparks</h3>
           <div id="carpark-info" class="scrollable">
-            <p>Select a carpark marker to view details.</p>
+            <p>
+              Select a Carpark Marker
+              <img
+                src="./img/Marker.png"
+                alt="Carpark Marker"
+                style="width: 12px; height: 17px; margin: 0px 1px"
+              />
+              and click the
+              <span class="fas fa-star" style="color: gold"></span> to add it to
+              your favourites.
+            </p>
           </div>
         </div>
       </div>
@@ -61,9 +90,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="carparkModalLabel">
-              Favourite Carparks
-            </h5>
+            <h5 class="modal-title" id="carparkModalLabel"></h5>
             <button
               type="button"
               class="close"
@@ -74,23 +101,52 @@
             </button>
           </div>
           <div class="modal-body">
-            <p><strong>Address:</strong> <span id="modalAddress"></span></p>
+            <div class="mt-3 mb-3">
+              <div class="d-flex">
+                <p class="w-50">
+                  <strong>Total Lots:</strong> <span id="modalTotalLots"></span>
+                </p>
+                <p class="w-50">
+                  <strong>Available Lots:</strong>
+                  <span id="modalAvailableLots"></span>
+                </p>
+              </div>
+
+              <!-- Progress Bar to display available lots as a percentage -->
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  id="lotsProgressBar"
+                  style="width: 0%"
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  0%
+                </div>
+              </div>
+            </div>
+
             <p>
               <strong>Free Parking Now:</strong>
               <span id="modalFreeParking"></span>
-            </p>
-            <p>
-              <strong>Total Lots:</strong> <span id="modalTotalLots"></span>
-            </p>
-            <p>
-              <strong>Available Lots:</strong>
-              <span id="modalAvailableLots"></span>
             </p>
             <p>
               <strong>Last Updated:</strong> <span id="modalLastUpdated"></span>
             </p>
           </div>
           <div class="modal-footer">
+            <span class="star-icon fas fa-star" id="starIcon"></span>
+            <a
+              href="#"
+              target="_blank"
+              id="viewOnGoogleMaps"
+              class="btn btn-primary"
+            >
+              View on Google Maps
+            </a>
+
             <button
               type="button"
               class="btn btn-secondary"
@@ -103,9 +159,9 @@
       </div>
     </div>
 
-    <!-- Google Maps API with Geometry Library -->
+    <!-- Google Maps API with Places Library for Autocomplete -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDel5_SPyjiSrwHDCKMM645JGlIYX5Ny7k&libraries=geometry&callback=initMap"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDel5_SPyjiSrwHDCKMM645JGlIYX5Ny7k&libraries=places,geometry&callback=initMap"
       async
     ></script>
   </body>

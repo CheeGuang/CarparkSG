@@ -7,7 +7,7 @@
   border: 2px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 85vh;
+  height: 80vh !important;
 }
 
 /* Favourite Carparks Panel Styling (formerly Carpark Details) */
@@ -17,7 +17,7 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   padding: 20px;
   font-family: "Roboto", sans-serif;
-  height: 85vh !important;
+  height: 80vh !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -60,6 +60,7 @@
   font-weight: 500;
 }
 
+/* Modal Custom Styling */
 /* Modal Custom Styling */
 .modal-content {
   background-color: #ffffff;
@@ -126,7 +127,42 @@
   box-shadow: none;
 }
 
-/* Modal backdrop customisation */
+/* Star Icon at the bottom of the modal */
+.star-icon {
+  font-size: 2rem;
+  color: grey;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.star-icon:hover {
+  color: gold;
+}
+
+/* Modal backdrop customization */
 .modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.5); /* Slightly darker backdrop */
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Progress Bar Styling */
+.progress {
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  background-color: #28a745; /* Default green color */
+  font-size: 0.875em;
+  color: #fff;
+  line-height: 20px;
+  transition: width 0.4s ease;
+  border-radius: 10px;
+}
+
+.full-lots {
+  background-color: #dc3545 !important; /* Red color when full */
+  color: #fff;
 }

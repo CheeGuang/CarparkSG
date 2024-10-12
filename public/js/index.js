@@ -26,6 +26,7 @@ function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 1.3521, lng: 103.8198 },
     zoom: 17,
+    clickableIcons: false,
   });
 
   map.fitBounds(singaporeBounds);
@@ -57,7 +58,6 @@ function initMap() {
               Array.isArray(availabilityData.data) &&
               Array.isArray(infoData.data)
             ) {
-              // Clear old markers
               markers.forEach((marker) => marker.setMap(null));
               markers = [];
 
@@ -76,15 +76,6 @@ function initMap() {
 
                   const carparkLocation = { lat: latitude, lng: longitude };
 
-                  // Debug statement: print carpark location and available lots
-                  console.log(
-                    `Carpark Location: (${carpark.address}), Available Lots: ${
-                      availabilityInfo.lots_available
-                    }, availabilityInfo.lots_available === 0 ${
-                      availabilityInfo.lots_available === 0
-                    }`
-                  );
-
                   const marker = new google.maps.Marker({
                     position: carparkLocation,
                     map: map,
@@ -92,17 +83,14 @@ function initMap() {
                     icon:
                       availabilityInfo.lots_available === "0"
                         ? unavailableIcon
-                        : defaultIcon, // Use unavailable icon if no lots available
+                        : defaultIcon,
                   });
 
-                  // Add a click listener for showing the modal with carpark details
                   marker.addListener("click", () => {
                     showModal(carpark, availabilityInfo);
                   });
 
                   markers.push(marker);
-
-                  // Attach carpark and availability info to the marker
                   marker.carpark = carpark;
                   marker.availability = availabilityInfo;
                 }
@@ -132,23 +120,52 @@ function initMap() {
   }
 
   function showModal(carpark, availability) {
-    // Populate the modal fields
-    document.getElementById("modalAddress").innerText = carpark.address;
+    const now = new Date();
+    const lastUpdated = new Date(availability.update_datetime);
+    const diff = Math.floor((now - lastUpdated) / 1000); // difference in seconds
+    const minutes = Math.floor(diff / 60);
+    const seconds = diff % 60;
+    const lastUpdatedText =
+      minutes > 0 ? `${minutes} min ${seconds} sec ago` : `${seconds} sec ago`;
+
+    // Set modal title to carpark address
+    document.getElementById("carparkModalLabel").innerText = carpark.address;
+
     document.getElementById("modalFreeParking").innerText =
       carpark.free_parking_now ? "Yes" : "No";
     document.getElementById("modalTotalLots").innerText =
       availability.total_lots;
     document.getElementById("modalAvailableLots").innerText =
       availability.lots_available;
-    document.getElementById("modalLastUpdated").innerText = new Date(
-      availability.update_datetime
-    ).toLocaleString();
+    document.getElementById("modalLastUpdated").innerText = lastUpdatedText;
+
+    // Calculate percentage of available lots and update the progress bar
+    const totalLots = parseInt(availability.total_lots);
+    const availableLots = parseInt(availability.lots_available);
+    const progressBar = document.getElementById("lotsProgressBar");
+
+    if (availableLots === 0) {
+      progressBar.style.width = "100%";
+      progressBar.classList.add("full-lots");
+      progressBar.innerText = "Full";
+    } else {
+      const percentage = Math.round((availableLots / totalLots) * 100);
+      progressBar.style.width = `${percentage}%`;
+      progressBar.classList.remove("full-lots");
+      progressBar.innerText = `${percentage}%`;
+    }
+    progressBar.setAttribute("aria-valuenow", availableLots);
+
+    // Set Google Maps link for "View on Google Maps" button
+    const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${carpark.address}`;
+    document
+      .getElementById("viewOnGoogleMaps")
+      .setAttribute("href", googleMapsLink);
 
     // Show the modal
     $("#carparkModal").modal("show");
   }
 
-  // Geolocation to get the user's location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -157,7 +174,6 @@ function initMap() {
           lng: position.coords.longitude,
         };
 
-        // Define the custom icon for live location
         const liveLocationIcon = {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 10,
@@ -167,7 +183,6 @@ function initMap() {
           strokeWeight: 4,
         };
 
-        // Create the user location marker
         const userLocationMarker = new google.maps.Marker({
           position: userLocation,
           map: map,
@@ -175,15 +190,13 @@ function initMap() {
           title: "You are here",
         });
 
-        // Automatically zoom in and center the map on the user's location
         map.setCenter(userLocation);
         map.setZoom(17);
 
-        fetchCarparkData(); // Fetch carpark data after centering the map
+        fetchCarparkData();
       },
       (error) => {
         console.error("Error: Unable to retrieve your location.", error);
-        // Proceed with fetching carpark data even without user location
         fetchCarparkData();
       },
       {
@@ -194,12 +207,31 @@ function initMap() {
     );
   } else {
     console.error("Error: Your browser doesn't support geolocation.");
-    // Proceed with fetching carpark data even without user location
     fetchCarparkData();
   }
 
-  // Fetch carpark data every minute
   setInterval(fetchCarparkData, 60000);
+
+  // Add Autocomplete functionality for the search bar
+  const autocomplete = new google.maps.places.Autocomplete(
+    document.getElementById("location-input"),
+    {
+      fields: ["geometry", "name"],
+      types: ["address"],
+    }
+  );
+
+  autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
+    if (!place.geometry) {
+      alert(`No details available for input: '${place.name}'`);
+      return;
+    }
+
+    // Center map to the selected place
+    map.setCenter(place.geometry.location);
+    map.setZoom(17);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", initMap);
