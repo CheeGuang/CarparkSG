@@ -106,11 +106,10 @@
   border-top: none;
   padding-top: 10px;
 }
-
 .modal-footer .btn {
-  font-size: 1em;
-  padding: 10px 20px;
-  border-radius: 30px;
+  font-size: 0.9em; /* Reduced font size */
+  padding: 6px 12px; /* Reduced padding */
+  border-radius: 20px; /* Slightly smaller border-radius */
 }
 
 .modal-footer .btn-secondary {
@@ -129,7 +128,7 @@
 
 /* Star Icon at the bottom of the modal */
 .star-icon {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: grey;
   cursor: pointer;
   transition: color 0.3s ease;
