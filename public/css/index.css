@@ -307,6 +307,14 @@
   color: #ff0000;
 }
 
+.modal {
+  z-index: 3000 !important; /* Ensure modal is above the navbar */
+}
+
+.modal-backdrop {
+  z-index: 2999 !important; /* Ensure backdrop is below modal but above navbar */
+}
+
 /* Media query for screens wider than 768px */
 @media (min-width: 768px) {
   #map {

@@ -142,8 +142,14 @@ function initMap() {
     // Set modal title to carpark address
     document.getElementById("carparkModalLabel").innerText = carpark.address;
 
+    // Check if free parking is available based on the free_parking field
+    const freeParkingAvailable =
+      carpark.free_parking && carpark.free_parking !== "NO"
+        ? `Yes (${carpark.free_parking})`
+        : "No";
+
     document.getElementById("modalFreeParking").innerText =
-      carpark.free_parking_now ? "Yes" : "No";
+      freeParkingAvailable;
     document.getElementById("modalTotalLots").innerText =
       availability.total_lots;
     document.getElementById("modalAvailableLots").innerText =
