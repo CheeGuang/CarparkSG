@@ -71,8 +71,25 @@
 }
 
 .modal-header {
-  border-bottom: none;
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+  position: relative; /* Allows for positioning the close button */
   padding-bottom: 10px;
+}
+
+.welcome-header .close {
+  position: absolute;
+  right: 20px; /* Position close button on the right */
+  top: 20px;
+}
+
+/* Adjust the modal title to ensure it's centered */
+.welcome-logo {
+  max-width: 70%;
+  height: auto;
+  margin: 0 auto; /* Center the image horizontally */
+  display: block; /* Ensure it's treated as a block for centering */
 }
 
 .modal-title {
@@ -238,7 +255,7 @@
 }
 
 .welcome-logo {
-  max-width: 50%; /* Smaller logo size */
+  max-width: 70%; /* Smaller logo size */
   height: auto;
 }
 
@@ -247,10 +264,11 @@
 }
 
 .welcome-text {
-  font-size: 2.5rem; /* Large welcome text */
+  font-size: 2rem; /* Large welcome text */
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
+  line-height: 2.5rem !important;
 }
 
 .welcome-subtext {
@@ -272,7 +290,6 @@
   font-size: 1.2rem;
   border-radius: 50px;
   padding: 10px 30px;
-  margin-top: 30px;
   border: 2px solid #007bff;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
