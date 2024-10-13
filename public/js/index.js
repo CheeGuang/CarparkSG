@@ -37,6 +37,7 @@ function initMap() {
     center: { lat: 1.3521, lng: 103.8198 },
     zoom: 17,
     clickableIcons: false,
+    gestureHandling: "greedy",
   });
 
   map.fitBounds(singaporeBounds);

@@ -306,3 +306,14 @@
 .welcome-close:hover {
   color: #ff0000;
 }
+
+/* Media query for screens wider than 768px */
+@media (min-width: 768px) {
+  #map {
+    height: 70vh !important;
+  }
+
+  #carpark-details {
+    height: 70vh !important;
+  }
+}

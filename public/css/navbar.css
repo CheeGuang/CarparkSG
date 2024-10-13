@@ -1,11 +1,19 @@
 .navbar {
   background-color: #ffffff !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+  /* border-bottom: 1px solid #ccc; */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
   font-weight: 600;
   font-size: 1.5rem;
   color: #333;
+  padding-left: 15px; /* Add padding to ensure the brand is not too close to the left edge */
 }
 
 /* Styles for the guest account icon */
@@ -25,4 +33,9 @@
 
 .guest-icon:focus {
   box-shadow: 0 0 5px rgba(128, 128, 128, 0.5); /* Subtle grey glow when focused */
+}
+
+/* Ensure that the page content does not overlap the navbar */
+body {
+  padding-top: 80px; /* Adjust this value to match the height of the navbar */
 }

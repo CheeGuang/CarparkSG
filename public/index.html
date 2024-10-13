@@ -3,7 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CarparkSG</title>
+    <meta
+      name="description"
+      content="Check real-time carpark availability in Singapore with CarparkSG. Find available carparks near you and add your favourites for easy access."
+    />
+    <meta
+      name="keywords"
+      content="Singapore carpark, carpark availability, real-time parking, parking in Singapore, carparkSG"
+    />
+    <title>CarparkSG - Real-Time Carpark Availability in Singapore</title>
+
     <!-- Bootstrap CSS -->
     <link
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -13,21 +22,34 @@
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/index.css" />
     <link rel="stylesheet" href="./css/navbar.css" />
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- proj4.js for coordinate conversion -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <!-- jQuery (Defer to improve page load) -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+    
+    ></script>
+    <!-- proj4.js for coordinate conversion (Defer to improve page load) -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"
+      defer
+    ></script>
     <!-- MarkerClusterer library -->
-    <script src="https://unpkg.com/@googlemaps/markerclusterer"></script>
+    <script
+      src="https://unpkg.com/@googlemaps/markerclusterer"
+      defer
+    ></script>
     <!-- Bootstrap JS for modal functionality -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
     <!-- Custom Script -->
-    <script src="./js/index.js" async></script>
+    <script src="./js/index.js"></script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -37,8 +59,13 @@
     />
   </head>
   <body>
-    <!-- Navbar will be loaded here -->
-    <div id="navbar"></div>
+    <!-- Main Header with H1 -->
+    <header class="container-fluid text-center my-3">
+      <!-- Navbar will be loaded here -->
+      <div id="navbar"></div>
+      <h1>Real-Time Carpark Availability in Singapore</h1>
+    </header>
+
 
     <!-- Search Bar for Address Autocomplete -->
     <div class="container-fluid">
@@ -49,6 +76,7 @@
             id="location-input"
             placeholder="Search for an address"
             class="form-control"
+            aria-label="Search for an address"
           />
         </div>
       </div>
@@ -57,28 +85,28 @@
     <div class="container-fluid">
       <div id="content" class="row d-flex justify-content-center">
         <!-- Map Container -->
-        <div class="col-lg-7" style="position: relative; height: 85vh">
-          <div id="map" style="position: relative; height: 85vh"></div>
+        <div class="col-lg-7">
+          <div id="map"></div>
           <!-- Font Awesome Location Button -->
-          <button id="jumpBackToLocation" class="btn btn-primary">
+          <button id="jumpBackToLocation" class="btn btn-primary" aria-label="Go back to current location">
             <i class="fas fa-location-arrow"></i>
           </button>
 
           <!-- Font Awesome Info Button -->
-          <button id="viewInfo" class="btn btn-info">
+          <button id="viewInfo" class="btn btn-info" aria-label="View information">
             <i class="fas fa-info-circle"></i>
           </button>
         </div>
 
         <!-- Favourite Carparks Panel -->
-        <div id="carpark-details" class="col-lg-4 p-3">
-          <h3>Favourite Carparks</h3>
+        <aside id="carpark-details" class="col-lg-4 p-3">
+          <h2>Favourite Carparks</h2>
           <div id="carpark-info" class="scrollable">
             <p>
               Select a Carpark Marker
               <img
                 src="./img/Marker.png"
-                alt="Carpark Marker"
+                alt="Carpark Marker Icon"
                 style="width: 12px; height: 17px; margin: 0px 1px"
               />
               and click the
@@ -86,7 +114,7 @@
               your favourites.
             </p>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
 
@@ -129,18 +157,18 @@
                 style="width: 12px; height: 17px; margin: 0px 3px"
               />
               to view availabilities. <br />
-              <hr>
+              <hr />
               Red Carpark Markers
               <img
                 src="./img/Marker.png"
-                alt="Carpark Marker"
+                alt="Carpark Marker Not Full"
                 style="width: 12px; height: 17px; margin: 0px 3px"
               />
               mean the carpark is not full. <br />
               Grey Carpark Markers
               <img
                 src="./img/UnavailableMarker.png"
-                alt="Unavailable Carpark Marker"
+                alt="Carpark Marker Full"
                 style="width: 12px; height: 17px; margin: 0px 3px"
               />
               mean the carpark is full.
@@ -240,7 +268,7 @@
       </div>
     </div>
 
-    <!-- Google Maps API with Places Library for Autocomplete -->
+    <!-- Google Maps API with Places Library for Autocomplete (Defer to improve load) -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDel5_SPyjiSrwHDCKMM645JGlIYX5Ny7k&libraries=places,geometry&callback=initMap"
       async
