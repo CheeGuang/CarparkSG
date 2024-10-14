@@ -1,0 +1,63 @@
+CREATE PROCEDURE usp_add_verification_code
+    @Email NVARCHAR(255),
+    @VerificationCode INT,
+    @Timestamp DATETIME2
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @context VARBINARY(128);
+
+    -- Retrieve the current context info
+    SET @context = CONTEXT_INFO();
+
+    -- Check if the stored procedure is already running
+    IF @context = 0x55555555555555555555555555555555
+    BEGIN
+        -- Exit to prevent recursion
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        -- Set context info to indicate that the stored procedure is running
+        SET CONTEXT_INFO 0x55555555555555555555555555555555;
+
+        -- Check if the user exists with the given email
+        IF EXISTS (SELECT 1 FROM [user] WHERE email = @Email)
+        BEGIN
+            -- Update verification_code and verification_code_timestamp
+            UPDATE [user]
+            SET 
+                verification_code = @VerificationCode,
+                verification_code_timestamp = @Timestamp
+            WHERE 
+                email = @Email;
+            
+            -- Return success message
+            SELECT 'Verification code and timestamp updated successfully' AS Message;
+        END
+        ELSE
+        BEGIN
+            -- Insert a new user with the given email, verification code, and timestamp
+            INSERT INTO [user] (email, verification_code, verification_code_timestamp)
+            VALUES (@Email, @VerificationCode, @Timestamp);
+            
+            -- Return success message for account creation
+            SELECT 'New account created and verification code added successfully' AS Message;
+        END
+
+        -- Reset the context info
+        SET CONTEXT_INFO 0x0;
+    END
+END;
+GO
+
+-- Example usage of the stored procedure
+DECLARE @CurrentTimestamp DATETIME2;
+SET @CurrentTimestamp = GETDATE();
+
+EXEC usp_add_verification_code 
+    @Email = 'john.doe@example.com', 
+    @VerificationCode = 234567, 
+    @Timestamp = @CurrentTimestamp;
+GO

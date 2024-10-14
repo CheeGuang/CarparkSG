@@ -9,6 +9,8 @@ const path = require("path");
 const carparkAvailabilityRoutes = require("./controllers/carparkAvailability/carparkAvailability.routes");
 // Initialising carparkInformation Routes
 const carparkInformationRoutes = require("./controllers/carparkInformation/carparkInformation.routes");
+// Initialising verificationCode Routes
+const verificationCodeRoutes = require("./controllers/verificationCode/verificationCode.routes");
 
 // ========== Set-Up ==========
 // Initiating app
@@ -31,6 +33,8 @@ app.get("/", (req, res) => {
 app.use("/api/carparkAvailability", carparkAvailabilityRoutes);
 // Carpark Information Route
 app.use("/api/carparkInformation", carparkInformationRoutes);
+// Verification Code Route
+app.use("/api/verificationCode", verificationCodeRoutes);
 
 // ========== Initialise Server ==========
 // Server Listening at port 8000

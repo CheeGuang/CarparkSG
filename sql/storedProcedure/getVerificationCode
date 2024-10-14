@@ -1,0 +1,14 @@
+-- Create stored procedure to get verification code and timestamp
+CREATE PROCEDURE usp_get_verification_code
+    @Email NVARCHAR(255)
+AS
+BEGIN
+    -- Select verification code and timestamp based on email
+    SELECT verification_code, verification_code_timestamp
+    FROM dbo.[user]
+    WHERE email = @Email;
+END;
+GO
+
+-- Execute the stored procedure for a specific email
+EXEC usp_get_verification_code 'john.doe@example.com';
