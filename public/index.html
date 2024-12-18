@@ -63,14 +63,14 @@
     <header class="container-fluid text-center my-3">
       <!-- Navbar will be loaded here -->
       <div id="navbar"></div>
-      <h1>Real-Time Carpark Availability in Singapore</h1>
+      
     </header>
 
 
     <!-- Search Bar for Address Autocomplete -->
     <div class="container-fluid">
-      <div class="row my-3">
-        <div class="col-12">
+      <div class="row my-3 justify-content-center">
+        <div class="col-lg-9 col-md-8 col-sm-10">
           <input
             type="text"
             id="location-input"
@@ -83,23 +83,23 @@
     </div>
 
     <div class="container-fluid">
-      <div id="content" class="row d-flex justify-content-center">
+      <div id="content" class="row justify-content-center">
         <!-- Map Container -->
-        <div class="col-lg-7">
+        <div class="col-lg-9 col-md-8 col-sm-10">
           <div id="map"></div>
           <!-- Font Awesome Location Button -->
-          <button id="jumpBackToLocation" class="btn btn-primary" aria-label="Go back to current location">
+          <button id="jumpBackToLocation" class="btn btn-primary mt-3" aria-label="Go back to current location">
             <i class="fas fa-location-arrow"></i>
           </button>
 
           <!-- Font Awesome Info Button -->
-          <button id="viewInfo" class="btn btn-info" aria-label="View information">
+          <button id="viewInfo" class="btn btn-info mt-3" aria-label="View information">
             <i class="fas fa-info-circle"></i>
           </button>
         </div>
 
         <!-- Favourite Carparks Panel -->
-        <aside id="carpark-details" class="col-lg-4 p-3">
+        <aside id="carpark-details" class="col-lg-9 col-md-8 col-sm-10 p-3">
           <h2>Favourite Carparks</h2>
           <div id="carpark-info" class="scrollable">
             <p>
@@ -117,6 +117,7 @@
         </aside>
       </div>
     </div>
+
 
     <!-- Welcome Modal -->
     <div

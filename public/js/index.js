@@ -56,6 +56,25 @@ function initMap() {
     scaledSize: new google.maps.Size(21, 28),
   };
 
+  const favouriteIcon = {
+    url: "../img/FavouriteMarker.png",
+    scaledSize: new google.maps.Size(21, 28),
+  };
+
+  function getFavouriteCarparks() {
+    return JSON.parse(localStorage.getItem("favouriteCarparks")) || [];
+  }
+
+  function toggleFavourite(carparkID) {
+    let favourites = getFavouriteCarparks();
+    if (favourites.includes(carparkID)) {
+      favourites = favourites.filter((id) => id !== carparkID);
+    } else {
+      favourites.push(carparkID);
+    }
+    localStorage.setItem("favouriteCarparks", JSON.stringify(favourites));
+  }
+
   function fetchCarparkData() {
     fetch(`${window.location.origin}/api/carparkAvailability/`)
       .then((response) => response.json())
@@ -72,6 +91,8 @@ function initMap() {
               markers.forEach((marker) => marker.setMap(null));
               markers = [];
 
+              const favourites = getFavouriteCarparks();
+
               const carparks = infoData.data;
               const availability = availabilityData.data;
 
@@ -87,14 +108,19 @@ function initMap() {
 
                   const carparkLocation = { lat: latitude, lng: longitude };
 
+                  const isFavourite = favourites.includes(carpark.car_park_no);
+                  const icon =
+                    availabilityInfo.lots_available === "0"
+                      ? unavailableIcon
+                      : isFavourite
+                      ? favouriteIcon
+                      : defaultIcon;
+
                   const marker = new google.maps.Marker({
                     position: carparkLocation,
                     map: map,
                     title: carpark.address,
-                    icon:
-                      availabilityInfo.lots_available === "0"
-                        ? unavailableIcon
-                        : defaultIcon,
+                    icon: icon,
                   });
 
                   marker.addListener("click", () => {
@@ -130,19 +156,31 @@ function initMap() {
       });
   }
 
+  function getFavouriteCarparks() {
+    return JSON.parse(localStorage.getItem("favouriteCarparks")) || [];
+  }
+
+  function toggleFavourite(carparkID) {
+    let favourites = getFavouriteCarparks();
+    if (favourites.includes(carparkID)) {
+      favourites = favourites.filter((id) => id !== carparkID);
+    } else {
+      favourites.push(carparkID);
+    }
+    localStorage.setItem("favouriteCarparks", JSON.stringify(favourites));
+  }
+
   function showModal(carpark, availability) {
     const now = new Date();
     const lastUpdated = new Date(availability.update_datetime);
-    const diff = Math.floor((now - lastUpdated) / 1000); // difference in seconds
+    const diff = Math.floor((now - lastUpdated) / 1000);
     const minutes = Math.floor(diff / 60);
     const seconds = diff % 60;
     const lastUpdatedText =
       minutes > 0 ? `${minutes} min ${seconds} sec ago` : `${seconds} sec ago`;
 
-    // Set modal title to carpark address
     document.getElementById("carparkModalLabel").innerText = carpark.address;
 
-    // Check if free parking is available based on the free_parking field
     const freeParkingAvailable =
       carpark.free_parking && carpark.free_parking !== "NO"
         ? `Yes (${carpark.free_parking})`
@@ -156,7 +194,6 @@ function initMap() {
       availability.lots_available;
     document.getElementById("modalLastUpdated").innerText = lastUpdatedText;
 
-    // Calculate percentage of available lots and update the progress bar
     const totalLots = parseInt(availability.total_lots);
     const availableLots = parseInt(availability.lots_available);
     const progressBar = document.getElementById("lotsProgressBar");
@@ -173,13 +210,23 @@ function initMap() {
     }
     progressBar.setAttribute("aria-valuenow", availableLots);
 
-    // Set Google Maps link for "View on Google Maps" button
+    const starIcon = document.getElementById("starIcon");
+    starIcon.classList.toggle(
+      "favourite",
+      getFavouriteCarparks().includes(carpark.car_park_no)
+    );
+
+    starIcon.onclick = () => {
+      toggleFavourite(carpark.car_park_no);
+      fetchCarparkData();
+      starIcon.classList.toggle("favourite");
+    };
+
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${carpark.address}`;
     document
       .getElementById("viewOnGoogleMaps")
       .setAttribute("href", googleMapsLink);
 
-    // Show the modal
     $("#carparkModal").modal("show");
   }
 
