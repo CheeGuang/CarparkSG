@@ -75,85 +75,110 @@ function initMap() {
     localStorage.setItem("favouriteCarparks", JSON.stringify(favourites));
   }
 
-  function fetchCarparkData() {
-    fetch(`${window.location.origin}/api/carparkAvailability/`)
-      .then((response) => response.json())
-      .then((availabilityData) => {
-        fetch(`${window.location.origin}/api/carparkInformation/`)
-          .then((response) => response.json())
-          .then((infoData) => {
-            if (
-              availabilityData.success &&
-              infoData.success &&
-              Array.isArray(availabilityData.data) &&
-              Array.isArray(infoData.data)
-            ) {
-              markers.forEach((marker) => marker.setMap(null));
-              markers = [];
+  class CarparkAvailability {
+    async fetchCarparkData() {
+      try {
+        const response = await fetch(
+          "https://api.data.gov.sg/v1/transport/carpark-availability"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        const carparkData = data.items[0].carpark_data;
 
-              const favourites = getFavouriteCarparks();
+        // Format the data as needed
+        const formattedData = carparkData.map((carpark) => {
+          return {
+            carpark_number: carpark.carpark_number,
+            total_lots: carpark.carpark_info[0].total_lots,
+            lot_type: carpark.carpark_info[0].lot_type,
+            lots_available: carpark.carpark_info[0].lots_available,
+            update_datetime: data.items[0].timestamp,
+          };
+        });
 
-              const carparks = infoData.data;
-              const availability = availabilityData.data;
+        return formattedData;
+      } catch (error) {
+        console.error(`Error fetching carpark data: ${error.message}`);
+        throw new Error("Failed to fetch carpark data");
+      }
+    }
+  }
 
-              carparks.forEach((carpark) => {
-                const availabilityInfo = availability.find(
-                  (a) => a.carpark_number === carpark.car_park_no
-                );
-                if (availabilityInfo) {
-                  const { latitude, longitude } = svy21ToWgs84(
-                    parseFloat(carpark.x_coord),
-                    parseFloat(carpark.y_coord)
-                  );
+  async function fetchCarparkData() {
+    try {
+      const carparkAvailability = new CarparkAvailability();
+      const availabilityData = await carparkAvailability.fetchCarparkData();
 
-                  const carparkLocation = { lat: latitude, lng: longitude };
+      const response = await fetch("../data/carparkInformation.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const infoData = await response.json();
 
-                  const isFavourite = favourites.includes(carpark.car_park_no);
-                  const icon =
-                    availabilityInfo.lots_available === "0"
-                      ? unavailableIcon
-                      : isFavourite
-                      ? favouriteIcon
-                      : defaultIcon;
+      if (
+        Array.isArray(availabilityData) &&
+        infoData.success &&
+        Array.isArray(infoData.data)
+      ) {
+        markers.forEach((marker) => marker.setMap(null));
+        markers = [];
 
-                  const marker = new google.maps.Marker({
-                    position: carparkLocation,
-                    map: map,
-                    title: carpark.address,
-                    icon: icon,
-                  });
+        const favourites = getFavouriteCarparks();
 
-                  marker.addListener("click", () => {
-                    showModal(carpark, availabilityInfo);
-                  });
+        const carparks = infoData.data;
+        const availability = availabilityData;
 
-                  markers.push(marker);
-                  marker.carpark = carpark;
-                  marker.availability = availabilityInfo;
-                }
-              });
+        carparks.forEach((carpark) => {
+          const availabilityInfo = availability.find(
+            (a) => a.carpark_number === carpark.car_park_no
+          );
+          if (availabilityInfo) {
+            const { latitude, longitude } = svy21ToWgs84(
+              parseFloat(carpark.x_coord),
+              parseFloat(carpark.y_coord)
+            );
 
-              new markerClusterer.MarkerClusterer({
-                map,
-                markers,
-              });
+            const carparkLocation = { lat: latitude, lng: longitude };
 
-              carparkDataLoaded = true;
-            } else {
-              console.error(
-                "Unexpected data format:",
-                availabilityData,
-                infoData
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching carpark information data:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error fetching carpark availability data:", error);
-      });
+            const isFavourite = favourites.includes(carpark.car_park_no);
+            const icon =
+              availabilityInfo.lots_available === "0"
+                ? unavailableIcon
+                : isFavourite
+                ? favouriteIcon
+                : defaultIcon;
+
+            const marker = new google.maps.Marker({
+              position: carparkLocation,
+              map: map,
+              title: carpark.address,
+              icon: icon,
+            });
+
+            marker.addListener("click", () => {
+              showModal(carpark, availabilityInfo);
+            });
+
+            markers.push(marker);
+            marker.carpark = carpark;
+            marker.availability = availabilityInfo;
+          }
+        });
+
+        new markerClusterer.MarkerClusterer({
+          map,
+          markers,
+        });
+
+        carparkDataLoaded = true;
+      } else {
+        console.error("Unexpected data format:", availabilityData, infoData);
+      }
+    } catch (error) {
+      console.error("Error fetching carpark data:", error);
+    }
   }
 
   function getFavouriteCarparks() {
